@@ -38,6 +38,9 @@ __FBSDID("$FrauBSD: //github.com/FrauBSD/git_logjoin/git_logjoin.c 2019-05-15 21
 #include <errno.h>
 #include <inttypes.h>
 #include <limits.h>
+#ifdef __APPLE__
+#undef ARG_MAX
+#endif
 #ifndef ARG_MAX
 #define ARG_MAX 2048
 #endif
