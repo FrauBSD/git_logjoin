@@ -1,4 +1,4 @@
-[//]: # ($FrauBSD: //github.com/FrauBSD/git_logjoin/README.md 2019-05-15 19:16:18 -0700 freebsdfrau $)
+[//]: # ($FrauBSD: //github.com/FrauBSD/git_logjoin/README.md 2019-05-15 21:31:52 -0700 freebsdfrau $)
 
 # Welcome to [FrauBSD.org/git\_logjoin](https://fraubsd.org/git_logjoin)!
 
@@ -28,7 +28,7 @@ from Git (using the below commands to generate your log):
 Your currently stuck if you'd like to concurrently render multiple
 repositories.
 
-Enter git\_logjoin (this tool).
+Enter `git_logjoin` (this tool).
 
 I whipped this up extremely fast (2 days) to solve the problem.
 
@@ -38,9 +38,8 @@ There's no C-code to edit, only shell.
 
 ### 1. Modify `join_logs.sh` to fit your needs. Primarily:
 
-	1.a. Change `LOGS=""` to contain appropriate repos:logfile entries
-	1.b. Change `GIT_LOG_HOST=` to be what you need
-	NOTE: Currently the shell script assumes all repos are on same host
+	Change `LOGS=""` to contain appropriate repos:logfile entries
+	NOTE: Currently the shell script assumes all repos are local paths
 
 ### 2. [OPTIONAL] Install sysutils/pv from the ports tree (provides I/O feedback):
 
