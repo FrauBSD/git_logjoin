@@ -28,7 +28,7 @@
 #
 # $Title: Test program to merge git log histories $
 # $DruidBSD: /cvsroot/druidbsd/git_logjoin/join_logs.sh,v 1.2 2017/06/21 02:39:56 devinteske Exp $
-# $FrauBSD: //github.com/FrauBSD/git_logjoin/join_logs.sh 2019-05-15 21:16:24 -0700 freebsdfrau $
+# $FrauBSD: //github.com/FrauBSD/git_logjoin/join_logs.sh 2019-05-15 21:21:28 -0700 freebsdfrau $
 # $FreeBSD$
 #
 ############################################################ CONFIGURATION
@@ -43,16 +43,14 @@ LOGDIR=logs
 # NOTE: Format is local_repos_dir:local_log_file
 #
 LOGS="
-	$HOME/src/voleon/pkgcenter-GE:$LOGDIR/pkgcenter-GE.log
-	$HOME/src/voleon/pkgcenter-IT:$LOGDIR/pkgcenter-IT.log
-	$HOME/src/voleon/pkgcenter-R:$LOGDIR/pkgcenter-R.log
+	$HOME/src/fraubsd/pkgcenter:$LOGDIR/pkgcenter.log
 
 " # END-QUOTE
 
 #
 # File(s) to save output(s) to
 #
-OUTPUT=../devin.log
+OUTPUT=../fraubsd.log
 
 #
 # Should we use sysutils/pv to monitor the progress? (recommended)
