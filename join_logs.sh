@@ -28,7 +28,7 @@
 #
 # $Title: Test program to merge git log histories $
 # $DruidBSD: /cvsroot/druidbsd/git_logjoin/join_logs.sh,v 1.2 2017/06/21 02:39:56 devinteske Exp $
-# $FrauBSD: //github.com/FrauBSD/git_logjoin/join_logs.sh 2019-05-15 21:21:28 -0700 freebsdfrau $
+# $FrauBSD: //github.com/FrauBSD/git_logjoin/join_logs.sh 2019-05-16 19:50:51 -0700 freebsdfrau $
 # $FreeBSD$
 #
 ############################################################ CONFIGURATION
@@ -37,6 +37,12 @@
 # Directory to look for logs in
 #
 LOGDIR=logs
+
+#
+# Remote host where `git log' is performed
+# NB: Unset or empty to use local directories on this host
+#
+REMOTE_HOST=
 
 #
 # List of git logfiles to join
@@ -58,9 +64,32 @@ OUTPUT=../fraubsd.log
 #
 USE_PV=YES
 
+############################################################ GLOBALS
+
+# NB: Only used if REMOTE_HOST is set and non-NULL
+SSH_OPT="-A -oStrictHostKeyChecking=no"
+
+GIT_LOG_OPT="
+	--pretty=format:user:%aN%n%ct
+	--reverse --raw --encoding=UTF-8
+	--no-renames
+" # END-QUOTE
+
+GET_LOG='
+	repos="$1"
+	shift 1 # repos
+	cd "$repos" && git pull > /dev/null && git log "$@"
+' # END-QUOTE
+
 ############################################################ FUNCTIONS
 
 have() { type "$@" > /dev/null 2>&1; }
+
+get_log()
+{
+	local repos
+	( eval "$GET_LOG" )
+}
 
 ############################################################ MAIN
 
@@ -85,16 +114,22 @@ for log in $LOGS; do
 	repos="${log%%:*}"
 	echo ">>> Downloading \`$repos' History to \`$logfile'..."
 	if [ "$USE_PV" ] && have pv; then
-		( cd "$repos" && git pull > /dev/null && \
-			git log --pretty=format:user:%aN%n%ct --reverse --raw \
-				--encoding=UTF-8 --no-renames ) |
-			pv > "$logfile"
+		if [ "$REMOTE_HOST" ]; then
+			echo "$GET_LOG" | ssh $SSH_OPT $REMOTE_HOST \
+				sh /dev/stdin "$repos" $GIT_LOG_OPT |
+				pv > "$logfile"
+		else
+			get_log "$repos" $GIT_LOG_OPT | pv > "$logfile"
+		fi
 	else
 		[ "$USE_PV" ] && echo "NOTE: If you install sysutils/pv" \
 		                      "you'll get a lot more feedback!"
-		( cd "$repos" && git pull > /dev/null && \
-			git log --pretty=format:user:%aN%n%ct --reverse --raw \
-				--encoding=UTF-8 --no-renames ) > "$logfile"
+		if [ "$REMOTE_HOST" ]; then
+			echo "$GET_LOG" | ssh $SSH_OPT $REMOTE_HOST \
+				sh /dev/stdin "$repos" $GIT_LOG_OPT
+		else
+			get_log "$repos" $GIT_LOG_OPT > "$logfile"
+		fi
 	fi
 	[ $? -eq 0 ] || exit 1
 done
