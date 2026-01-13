@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2001-2019 Devin Teske <dteske@FreeBSD.org>
+ * Copyright (c) 2001-2026 Devin Teske <dteske@FreeBSD.org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,12 +29,13 @@
 #include <sys/cdefs.h>
 #ifdef __FBSDID
 __FBSDID("$FreeBSD: head/lib/libfigpar/string_m.c 274116 2014-11-04 23:46:01Z dteske $");
-__FBSDID("$FrauBSD: //github.com/FrauBSD/git_logjoin/string_m.c 2019-05-15 21:16:24 -0700 freebsdfrau $");
+__FBSDID("$FrauBSD: //github.com/FrauBSD/git_logjoin/string_m.c 2026-01-13 10:07:46 -0800 freebsdfrau $");
 #endif
 
 #include <errno.h>
 #include <inttypes.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 
@@ -115,7 +116,7 @@ replaceall(char *source, const char *find, const char *replace)
         if (rlen > flen) {
                 temp = malloc(slen + 1);
                 if (errno) return -1; /* could not allocate memory */
-                strcpy(temp, source);
+                snprintf(temp, slen, "%s", source);
         } else
                 temp = source;
 
